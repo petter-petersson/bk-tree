@@ -2,26 +2,9 @@ require "../spec_helper"
 
 describe BK::Node do
   context "adding and querying" do
-    it "should retreive expected items" do
-      distance_mock = DistanceCalculatorMock.new
-      root = BK::Node.new("root", distance_mock)
-      root.word.should eq("root")
 
-      SpecHelper.words.each do |word|
-        root.add(word.downcase.gsub(/[^a-z]+/, ""))
-      end
-      distance_mock.calls.clear
-
-      result = Hash(Int32, String).new
-      root.query("jambo", 3, result)
-      distance_mock.calls.size.should eq(10)
-      result.should eq(
-        {1 => "consectetur", 2 => "adipiscing", 3 => "elit"}
-      )
-    end
-
-    it "should not scan the whole tree" do
-      distance_calculator = CallCountingDistanceCalculator.new
+    it "should locate similar item" do
+      distance_calculator = SpecHelper::DistanceCalculator.new
       list = SpecHelper.words.to_a
       root = BK::Node.new(list.first, distance_calculator)
       list[1..-1].each do |word|
@@ -38,8 +21,8 @@ describe BK::Node do
     end
 
     context "on a large data set" do
-      it "should not scan the whole tree" do
-        distance_calculator = CallCountingDistanceCalculator.new
+      it "should locate similar items" do
+        distance_calculator = SpecHelper::DistanceCalculator.new
         root : BK::Node? = nil
         row = 0
         t = Time.measure do

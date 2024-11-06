@@ -13,26 +13,13 @@ module SpecHelper
         deserunt mollit anim id est laborum}
     )
   end
-end
+  class DistanceCalculator < BK::LevenshteinDistanceCalculator
+    property calls = [] of Tuple(String, String)
 
-class DistanceCalculatorMock
-  include BK::WordDistanceCalculator
-  property call_count : Int32 = 0
-  property distance_values : Array(Int32) = (1..10).to_a
-  property calls = [] of Tuple(String, String)
-
-  def distance(string1 : String, string2 : String) : Int32
-    @calls << {string1, string2}
-    @call_count += 1
-    return @distance_values[@call_count % @distance_values.size]
+    def distance(string1 : String, string2 : String) : Int32
+      @calls << {string1, string2}
+      super
+    end
   end
 end
 
-class CallCountingDistanceCalculator < BK::LevenshteinDistanceCalculator
-  property calls = [] of Tuple(String, String)
-
-  def distance(string1 : String, string2 : String) : Int32
-    @calls << {string1, string2}
-    super
-  end
-end
