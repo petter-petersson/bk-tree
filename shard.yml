@@ -1,0 +1,9 @@
+name: bk-tree
+version: 0.1.0
+
+authors:
+  - petter petersson <petter.e.peterson@gmail.com>
+
+crystal: '>= 1.14.0'
+
+license: MIT
